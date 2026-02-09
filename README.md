@@ -169,7 +169,45 @@ out/
 | Random sequences | `trdg --document -c 10 -l ko -rs` |
 | Custom dictionary | `trdg --document -c 10 -dt my_dict.txt` |
 
-When using `-i` with a directory, `-c` is ignored — one page is generated per `.txt` file.
+When using `-i` without `-c`, one page is generated per input text file.
+
+</details>
+
+<details>
+<summary>Multi-Variant Generation (-i + -c)</summary>
+
+Combine `-i` (input text) with `-c` (count) to generate **multiple random visual variants** from the same text. User-specified options stay fixed; everything else is randomized per page.
+
+```bash
+# 1 text file × 20 random variants = 20 pages
+trdg --document -i novel.txt -c 20
+
+# Fix background to white, randomize everything else
+trdg --document -i novel.txt -c 20 -b 1
+
+# Fix font size and background, randomize the rest
+trdg --document -i novel.txt -c 20 -b 1 --font_size 42
+
+# Folder: 3 files × 10 variants each = 30 pages
+trdg --document -i texts/ -c 10
+```
+
+**Randomized parameters** (when not explicitly set):
+
+| Parameter | Random Range |
+|-----------|-------------|
+| `--font_size` | 28–64 px |
+| `--line_spacing` | 1.4–2.8 |
+| `--paragraph_spacing` | 30–100 px |
+| `-al` (alignment) | 0 (70%), 1 (20%), 2 (10%) |
+| `-tc` (text_color) | #282828, #000000, #333333, #1a1a1a, #444444 |
+| `-sw` (stroke_width) | 0 (80%), 1 (20%) |
+| `-b` (background) | 0 (40%), 1 (40%), 2 (20%) |
+| `-bl` (blur) | 0–3, random_blur=True |
+| `-k` (skew_angle) | 0–5, random_skew=True |
+| `-d` (distorsion) | 0 (60%), 1 (20%), 2 (10%), 3 (10%) |
+| `-m` (margins) | 150–350 px (uniform) |
+| `--font_size_variation` | 0 (50%), 3/5/8 (50%) |
 
 </details>
 
@@ -356,8 +394,10 @@ trdg --document -c 10 -l ko -b 0 -bl 1 -rbl -k 2 -rk -d 1
 | `-sf` | Stroke fill color | #282828 |
 | `-ft` | Specific font file path | - |
 | `-fd` | Font directory | - |
+| `-im` | Image mode (RGB or L for grayscale) | RGB |
 | `-t` | Number of worker processes | 1 |
 | `--output_dir` | Output directory | out/ |
+| `--seed` | Random seed for reproducibility | - |
 
 ---
 

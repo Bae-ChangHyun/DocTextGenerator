@@ -61,8 +61,9 @@ def parse_arguments():
         "--count",
         type=int,
         nargs="?",
-        help="The number of images to be created.",
-        required=True,
+        help="The number of images to be created. "
+             "Required for text mode; optional for document mode with -i.",
+        default=0,
     )
     parser.add_argument(
         "-rs",
@@ -417,8 +418,16 @@ def main():
     if args.document:
         from trdg.run_doc import _run_document_mode, _detect_user_specified
         args._user_specified = _detect_user_specified(parser)
+        # Validate: document mode needs either -c or -i
+        input_file = getattr(args, 'input_file', '') or ''
+        if (not args.count or args.count <= 0) and not input_file:
+            sys.exit("Error: document mode requires -c COUNT or -i INPUT_PATH")
         _run_document_mode(args)
         return
+
+    # Text mode requires -c
+    if not args.count or args.count <= 0:
+        sys.exit("Error: text mode requires -c COUNT")
 
     # Create the directory if it does not exist.
     try:
