@@ -50,7 +50,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "trdg=trdg.run:main"
+            "trdg=trdg.run:main",
+            "trdg-doc=trdg.run_doc:main",
         ],
     },
 )

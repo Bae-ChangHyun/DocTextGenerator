@@ -222,6 +222,118 @@ Number of images generated per second.
 
 If anything is missing, unclear, or simply not working, open an issue on the repository.
 
+## A4 Document Page Generation (New!)
+
+In addition to single-line text images, this fork supports generating **full A4-sized document page images** (2480x3508 pixels at 300 DPI) with multi-line text. This is ideal for training document-level OCR models.
+
+Each generated image is paired with a `.gt.txt` ground truth text file.
+
+### Basic usage
+
+```
+python -m trdg.run_doc -c 1000 -l ko
+```
+
+This generates 1,000 A4 document images with Korean text. All languages supported by the original TRDG are available.
+
+### Samples
+
+| Korean (white) | Korean (noise) | Korean (noise + blur + skew) |
+|:---:|:---:|:---:|
+| ![ko_white](samples/doc/ko_white.jpg) | ![ko_noise](samples/doc/ko_noise.jpg) | ![ko_effects](samples/doc/ko_effects.jpg) |
+
+| English | Chinese | Japanese |
+|:---:|:---:|:---:|
+| ![en](samples/doc/en_white.jpg) | ![cn](samples/doc/cn_white.jpg) | ![ja](samples/doc/ja_white.jpg) |
+
+### Text sources
+
+```bash
+# Dictionary-based (default)
+python -m trdg.run_doc -c 10 -l ko
+
+# Wikipedia articles
+python -m trdg.run_doc -c 10 -l ko -wk
+
+# Custom text file
+python -m trdg.run_doc -c 10 -i my_text.txt
+
+# Random character sequences
+python -m trdg.run_doc -c 10 -l ko -rs
+```
+
+### Page layout options
+
+```bash
+# Custom font size (42px ≈ 10pt at 300DPI)
+python -m trdg.run_doc -c 10 -l ko --font_size 50
+
+# Variable font size per page
+python -m trdg.run_doc -c 10 -l ko --font_size_min 36 --font_size_max 52
+
+# Custom margins (top,left,bottom,right in pixels)
+python -m trdg.run_doc -c 10 -l ko -m 300,200,300,200
+
+# Line spacing and paragraph spacing
+python -m trdg.run_doc -c 10 -l ko --line_spacing 2.0 --paragraph_spacing 80
+
+# Text alignment (0=left, 1=center, 2=right)
+python -m trdg.run_doc -c 10 -l ko -al 1
+```
+
+### Effects
+
+```bash
+# Gaussian noise background
+python -m trdg.run_doc -c 10 -l ko -b 0
+
+# Gaussian blur
+python -m trdg.run_doc -c 10 -l ko -bl 2 -rbl
+
+# Page skew (simulate scanner misalignment)
+python -m trdg.run_doc -c 10 -l ko -k 3 -rk
+
+# Distortion (1=sine, 2=cosine, 3=random)
+python -m trdg.run_doc -c 10 -l ko -d 1
+
+# Combine all effects
+python -m trdg.run_doc -c 10 -l ko -b 0 -bl 1 -rbl -k 2 -rk -d 1
+```
+
+### Multi-language support
+
+```bash
+python -m trdg.run_doc -c 10 -l en    # English
+python -m trdg.run_doc -c 10 -l ko    # Korean
+python -m trdg.run_doc -c 10 -l cn    # Chinese
+python -m trdg.run_doc -c 10 -l ja    # Japanese
+python -m trdg.run_doc -c 10 -l fr    # French
+python -m trdg.run_doc -c 10 -l de    # German
+python -m trdg.run_doc -c 10 -l ar    # Arabic
+python -m trdg.run_doc -c 10 -l hi    # Hindi
+```
+
+### Parallel generation
+
+```bash
+# Use 4 worker processes
+python -m trdg.run_doc -c 1000 -l ko -t 4
+```
+
+### Output format
+
+```
+out/
+├── 000000.png        # A4 document image
+├── 000000.gt.txt     # Ground truth text (UTF-8)
+├── 000001.png
+├── 000001.gt.txt
+├── ...
+└── labels.txt        # Image-to-GT mapping
+```
+
+For the full list of options, run `python -m trdg.run_doc -h`.
+
 ## What is left to do?
 - Better background generation
 - Better handwritten text generation

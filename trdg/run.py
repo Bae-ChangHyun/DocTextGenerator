@@ -341,6 +341,59 @@ def parse_arguments():
         help="Define the image mode to be used. RGB is default, L means 8-bit grayscale images, 1 means 1-bit binary images stored with one pixel per byte, etc.",
         default="RGB",
     )
+    parser.add_argument(
+        "--document",
+        action="store_true",
+        help="Generate A4 document page images instead of single-line text images. "
+             "When set, runs the document generation mode (same as trdg-doc). "
+             "Accepts all trdg-doc arguments (--font_size, --line_spacing, etc.)",
+        default=False,
+    )
+    # Document mode arguments (only used when --document is set)
+    parser.add_argument(
+        "--font_size", type=int, default=42,
+        help="[Document mode] Font size in pixels (42px ≈ 10pt@300DPI)",
+    )
+    parser.add_argument(
+        "--font_size_min", type=int, default=None,
+        help="[Document mode] Min font size for random variation",
+    )
+    parser.add_argument(
+        "--font_size_max", type=int, default=None,
+        help="[Document mode] Max font size for random variation",
+    )
+    parser.add_argument(
+        "--line_spacing", type=float, default=1.8,
+        help="[Document mode] Line spacing multiplier (default: 1.8)",
+    )
+    parser.add_argument(
+        "--paragraph_spacing", type=int, default=60,
+        help="[Document mode] Extra pixels between paragraphs (default: 60)",
+    )
+    parser.add_argument(
+        "--page_width", type=int, default=2480,
+        help="[Document mode] Page width in pixels (default: 2480 for A4@300DPI)",
+    )
+    parser.add_argument(
+        "--page_height", type=int, default=3508,
+        help="[Document mode] Page height in pixels (default: 3508 for A4@300DPI)",
+    )
+    parser.add_argument(
+        "--num_paragraphs", type=int, default=5,
+        help="[Document mode] Number of paragraphs per page (default: 5)",
+    )
+    parser.add_argument(
+        "--lines_per_paragraph", type=str, default="3,8",
+        help="[Document mode] Lines per paragraph range: min,max (default: 3,8)",
+    )
+    parser.add_argument(
+        "--words_per_line", type=str, default="5,15",
+        help="[Document mode] Words per line range: min,max (default: 5,15)",
+    )
+    parser.add_argument(
+        "--seed", type=int, default=None,
+        help="Random seed for reproducibility",
+    )
     return parser.parse_args()
 
 
@@ -351,6 +404,15 @@ def main():
 
     # Argument parsing
     args = parse_arguments()
+
+    if args.seed is not None:
+        rnd.seed(args.seed)
+
+    # Document mode: delegate to run_doc
+    if args.document:
+        from trdg.run_doc import main as doc_main_impl, _run_document_mode
+        _run_document_mode(args)
+        return
 
     # Create the directory if it does not exist.
     try:

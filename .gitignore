@@ -101,3 +101,13 @@ ENV/
 .mypy_cache/
 
 .vscode/*
+
+# Output directories
+out/
+out_*/
+
+# uv
+uv.lock
+
+# todo
+todo.md
