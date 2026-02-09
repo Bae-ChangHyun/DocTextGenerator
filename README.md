@@ -2,6 +2,8 @@
 
 A synthetic data generator for text recognition — supporting both **single-line text images** and **full A4 document page images**.
 
+**English** | [한국어](README_ko.md)
+
 ---
 
 ## Table of Contents
