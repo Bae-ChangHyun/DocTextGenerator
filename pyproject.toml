@@ -1,7 +1,9 @@
 [project]
-name = "textrecognitiondatagenerator"
-version = "0.1.0"
-description = "Add your description here"
+name = "trdg"
+version = "1.8.0"
+description = "TextRecognitionDataGenerator: A synthetic data generator for text recognition"
+readme = "README.md"
+license = {text = "MIT"}
 requires-python = ">=3.13"
 dependencies = [
     "arabic-reshaper>=3.0.0",
@@ -14,3 +16,7 @@ dependencies = [
     "tqdm>=4.67.3",
     "wikipedia>=1.4.0",
 ]
+
+[project.scripts]
+trdg = "trdg.run:main"
+trdg-doc = "trdg.run_doc:main"

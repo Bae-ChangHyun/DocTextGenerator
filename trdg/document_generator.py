@@ -73,6 +73,66 @@ def _wrap_text_to_lines(text, font, max_width):
     return lines
 
 
+def _render_line_char_by_char(
+    txt_draw,
+    line,
+    x_start,
+    y_baseline,
+    font_path,
+    base_font_size,
+    variation,
+    fill,
+    stroke_width,
+    s_fill,
+):
+    """
+    Render a line character by character with random font size per character.
+    Each character is vertically aligned to a common baseline.
+    Returns the total rendered width.
+    """
+    base_font = ImageFont.truetype(font=font_path, size=base_font_size)
+    base_ascent = base_font.getmetrics()[0]
+    space_w = get_text_width(base_font, " ")
+
+    x = x_start
+    for char in line:
+        if char == " ":
+            x += space_w
+            continue
+
+        # Random font size for this character
+        char_size = base_font_size + rnd.randint(-variation, variation)
+        char_size = max(char_size, 8)  # minimum 8px
+        char_font = ImageFont.truetype(font=font_path, size=char_size)
+
+        # Align to baseline: shift smaller chars down, larger chars up
+        char_ascent = char_font.getmetrics()[0]
+        y_offset = base_ascent - char_ascent
+
+        txt_draw.text(
+            (x, y_baseline + y_offset),
+            char,
+            fill=fill,
+            font=char_font,
+            stroke_width=stroke_width,
+            stroke_fill=s_fill,
+        )
+
+        char_w = get_text_width(char_font, char)
+        x += char_w
+
+    return x - x_start
+
+
+def _get_line_width_char_by_char(line, font_path, base_font_size):
+    """
+    Estimate line width using base font size (for alignment calculation).
+    Actual width varies due to random sizes, but base size gives a good estimate.
+    """
+    base_font = ImageFont.truetype(font=font_path, size=base_font_size)
+    return get_text_width(base_font, line)
+
+
 def _render_document_text(
     text,
     font_path,
@@ -89,20 +149,31 @@ def _render_document_text(
     alignment,
     stroke_width=0,
     stroke_fill="#282828",
+    font_size_variation=0,
 ):
     """
     Render multi-line text onto a transparent RGBA canvas.
     Returns (text_image, rendered_ground_truth).
+
+    When font_size_variation > 0, each character is rendered with a randomly
+    varied font size (base ± variation) for a handwritten/noisy effect.
     """
     image_font = ImageFont.truetype(font=font_path, size=font_size)
+
+    # For wrapping, use the max possible font size to avoid overflow
+    if font_size_variation > 0:
+        max_font_size = font_size + font_size_variation
+        wrap_font = ImageFont.truetype(font=font_path, size=max_font_size)
+    else:
+        wrap_font = image_font
 
     content_width = page_width - margin_left - margin_right
     content_height = page_height - margin_top - margin_bottom
 
-    # Wrap text to lines
-    all_lines = _wrap_text_to_lines(text, image_font, content_width)
+    # Wrap text to lines (use wrap_font to account for max possible char width)
+    all_lines = _wrap_text_to_lines(text, wrap_font, content_width)
 
-    # Calculate line height
+    # Calculate line height based on base font
     sample_height = get_text_height(image_font, "가나다라마바사")
     line_height = int(sample_height * line_spacing)
 
@@ -156,14 +227,30 @@ def _render_document_text(
         else:
             x = margin_left
 
-        txt_draw.text(
-            (x, y),
-            line,
-            fill=fill,
-            font=image_font,
-            stroke_width=stroke_width,
-            stroke_fill=s_fill,
-        )
+        if font_size_variation > 0:
+            # Character-by-character rendering with random font sizes
+            _render_line_char_by_char(
+                txt_draw=txt_draw,
+                line=line,
+                x_start=x,
+                y_baseline=y,
+                font_path=font_path,
+                base_font_size=font_size,
+                variation=font_size_variation,
+                fill=fill,
+                stroke_width=stroke_width,
+                s_fill=s_fill,
+            )
+        else:
+            # Standard whole-line rendering (original behavior)
+            txt_draw.text(
+                (x, y),
+                line,
+                fill=fill,
+                font=image_font,
+                stroke_width=stroke_width,
+                stroke_fill=s_fill,
+            )
 
         rendered_lines.append(line)
         y += line_height
@@ -211,6 +298,7 @@ class DocumentGenerator:
         distorsion_orientation=0,
         image_mode="RGB",
         name_format=2,
+        font_size_variation=0,
     ):
         """
         Generate a single A4 document page image.
@@ -241,6 +329,7 @@ class DocumentGenerator:
             alignment=alignment,
             stroke_width=stroke_width,
             stroke_fill=stroke_fill,
+            font_size_variation=font_size_variation,
         )
 
         # 2. Generate background

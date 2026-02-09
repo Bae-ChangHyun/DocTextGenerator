@@ -363,6 +363,11 @@ def parse_arguments():
         help="[Document mode] Max font size for random variation",
     )
     parser.add_argument(
+        "--font_size_variation", type=int, default=0,
+        help="[Document mode] Per-character font size variation in ±pixels (default: 0). "
+             "E.g., --font_size 42 --font_size_variation 5 → each char 37~47px",
+    )
+    parser.add_argument(
         "--line_spacing", type=float, default=1.8,
         help="[Document mode] Line spacing multiplier (default: 1.8)",
     )
@@ -394,7 +399,7 @@ def parse_arguments():
         "--seed", type=int, default=None,
         help="Random seed for reproducibility",
     )
-    return parser.parse_args()
+    return parser, parser.parse_args()
 
 
 def main():
@@ -403,14 +408,15 @@ def main():
     """
 
     # Argument parsing
-    args = parse_arguments()
+    parser, args = parse_arguments()
 
     if args.seed is not None:
         rnd.seed(args.seed)
 
     # Document mode: delegate to run_doc
     if args.document:
-        from trdg.run_doc import main as doc_main_impl, _run_document_mode
+        from trdg.run_doc import _run_document_mode, _detect_user_specified
+        args._user_specified = _detect_user_specified(parser)
         _run_document_mode(args)
         return
 

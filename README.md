@@ -183,6 +183,9 @@ trdg --document -c 10 -l ko --font_size 50
 # Variable font size per page
 trdg --document -c 10 -l ko --font_size_min 36 --font_size_max 52
 
+# Per-character font size variation (±pixels, handwritten/noisy effect)
+trdg --document -c 10 -l ko --font_size 42 --font_size_variation 8
+
 # Margins (top,left,bottom,right in pixels)
 trdg --document -c 10 -l ko -m 300,200,300,200
 
@@ -214,6 +217,7 @@ trdg --document -c 10 -l ko --page_width 2480 --page_height 3508
 | `--font_size` | Font size in pixels | 42 |
 | `--font_size_min` | Min font size (random range) | - |
 | `--font_size_max` | Max font size (random range) | - |
+| `--font_size_variation` | Per-character font size variation in ±px | 0 |
 | `--line_spacing` | Line spacing multiplier | 1.8 |
 | `--paragraph_spacing` | Extra pixels between paragraphs | 60 |
 | `-al` | Alignment (0=left, 1=center, 2=right) | 0 |
