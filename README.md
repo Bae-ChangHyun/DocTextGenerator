@@ -126,17 +126,13 @@ Generate **full A4-sized document page images** (2480x3508 pixels at 300 DPI) wi
 ### Quick Start
 
 ```bash
-# Standalone CLI
-python -m trdg.run_doc -c 10 -l ko
-
-# Via trdg command
 trdg --document -c 10 -l ko
 
 # From a single text file
-python -m trdg.run_doc -i /path/to/text.txt
+trdg --document -i /path/to/text.txt
 
 # From a folder of text files (one page per .txt)
-python -m trdg.run_doc -i /path/to/folder/
+trdg --document -i /path/to/folder/
 ```
 
 ### Samples
@@ -166,12 +162,12 @@ out/
 
 | Source | Command |
 |--------|---------|
-| Dictionary (default) | `python -m trdg.run_doc -c 10 -l ko` |
-| Wikipedia articles | `python -m trdg.run_doc -c 10 -l ko -wk` |
-| Single text file | `python -m trdg.run_doc -i my_text.txt` |
-| Folder of text files | `python -m trdg.run_doc -i /path/to/folder/` |
-| Random sequences | `python -m trdg.run_doc -c 10 -l ko -rs` |
-| Custom dictionary | `python -m trdg.run_doc -c 10 -dt my_dict.txt` |
+| Dictionary (default) | `trdg --document -c 10 -l ko` |
+| Wikipedia articles | `trdg --document -c 10 -l ko -wk` |
+| Single text file | `trdg --document -i my_text.txt` |
+| Folder of text files | `trdg --document -i /path/to/folder/` |
+| Random sequences | `trdg --document -c 10 -l ko -rs` |
+| Custom dictionary | `trdg --document -c 10 -dt my_dict.txt` |
 
 When using `-i` with a directory, `-c` is ignored — one page is generated per `.txt` file.
 
@@ -182,22 +178,22 @@ When using `-i` with a directory, `-c` is ignored — one page is generated per 
 
 ```bash
 # Font size (42px ≈ 10pt at 300DPI)
-python -m trdg.run_doc -c 10 -l ko --font_size 50
+trdg --document -c 10 -l ko --font_size 50
 
 # Variable font size per page
-python -m trdg.run_doc -c 10 -l ko --font_size_min 36 --font_size_max 52
+trdg --document -c 10 -l ko --font_size_min 36 --font_size_max 52
 
 # Margins (top,left,bottom,right in pixels)
-python -m trdg.run_doc -c 10 -l ko -m 300,200,300,200
+trdg --document -c 10 -l ko -m 300,200,300,200
 
 # Line / paragraph spacing
-python -m trdg.run_doc -c 10 -l ko --line_spacing 2.0 --paragraph_spacing 80
+trdg --document -c 10 -l ko --line_spacing 2.0 --paragraph_spacing 80
 
 # Alignment (0=left, 1=center, 2=right)
-python -m trdg.run_doc -c 10 -l ko -al 1
+trdg --document -c 10 -l ko -al 1
 
 # Custom page size
-python -m trdg.run_doc -c 10 -l ko --page_width 2480 --page_height 3508
+trdg --document -c 10 -l ko --page_width 2480 --page_height 3508
 ```
 
 </details>
@@ -225,7 +221,7 @@ python -m trdg.run_doc -c 10 -l ko --page_width 2480 --page_height 3508
 | `--lines_per_paragraph` | Lines per paragraph (min,max) | 3,8 |
 | `--words_per_line` | Words per line (min,max) | 5,15 |
 
-Full options: `python -m trdg.run_doc -h`
+Full options: `trdg --document -h`
 
 </details>
 
@@ -239,16 +235,16 @@ The following options are shared by both Text Mode and Document Mode.
 
 ```bash
 # Text Mode                          # Document Mode
-trdg -c 100 -l en                    python -m trdg.run_doc -c 10 -l en      # English
-trdg -c 100 -l ko                    python -m trdg.run_doc -c 10 -l ko      # Korean
-trdg -c 100 -l cn                    python -m trdg.run_doc -c 10 -l cn      # Chinese
-trdg -c 100 -l ja                    python -m trdg.run_doc -c 10 -l ja      # Japanese
-trdg -c 100 -l fr                    python -m trdg.run_doc -c 10 -l fr      # French
-trdg -c 100 -l de                    python -m trdg.run_doc -c 10 -l de      # German
-trdg -c 100 -l es                    python -m trdg.run_doc -c 10 -l es      # Spanish
-trdg -c 100 -l ar                    python -m trdg.run_doc -c 10 -l ar      # Arabic
-trdg -c 100 -l hi                    python -m trdg.run_doc -c 10 -l hi      # Hindi
-trdg -c 100 -l th                    python -m trdg.run_doc -c 10 -l th      # Thai
+trdg -c 100 -l en                    trdg --document -c 10 -l en      # English
+trdg -c 100 -l ko                    trdg --document -c 10 -l ko      # Korean
+trdg -c 100 -l cn                    trdg --document -c 10 -l cn      # Chinese
+trdg -c 100 -l ja                    trdg --document -c 10 -l ja      # Japanese
+trdg -c 100 -l fr                    trdg --document -c 10 -l fr      # French
+trdg -c 100 -l de                    trdg --document -c 10 -l de      # German
+trdg -c 100 -l es                    trdg --document -c 10 -l es      # Spanish
+trdg -c 100 -l ar                    trdg --document -c 10 -l ar      # Arabic
+trdg -c 100 -l hi                    trdg --document -c 10 -l hi      # Hindi
+trdg -c 100 -l th                    trdg --document -c 10 -l th      # Thai
 ```
 
 ### Backgrounds
@@ -267,7 +263,7 @@ Use `-b` to select a background type.
 trdg -c 100 -b 1
 
 # Document Mode
-python -m trdg.run_doc -c 10 -l ko -b 1
+trdg --document -c 10 -l ko -b 1
 ```
 
 ### Effects
@@ -282,7 +278,7 @@ Add `-k` (angle) and `-rk` (random):
 trdg -c 100 -k 5 -rk
 
 # Document Mode
-python -m trdg.run_doc -c 10 -l ko -k 3 -rk
+trdg --document -c 10 -l ko -k 3 -rk
 ```
 
 ![6](samples/6.jpg) ![7](samples/7.jpg) ![8](samples/8.jpg)
@@ -299,7 +295,7 @@ Add `-d` (type: 1=sin, 2=cos, 3=random) and `-do` (orientation: 0=V, 1=H, 2=both
 trdg -c 100 -d 1
 
 # Document Mode
-python -m trdg.run_doc -c 10 -l ko -d 1
+trdg --document -c 10 -l ko -d 1
 ```
 
 ![23](samples/24.jpg) ![24](samples/25.jpg) ![25](samples/26.jpg)
@@ -316,7 +312,7 @@ Add `-bl` (radius) and `-rbl` (random):
 trdg -c 100 -bl 2 -rbl
 
 # Document Mode
-python -m trdg.run_doc -c 10 -l ko -bl 2 -rbl
+trdg --document -c 10 -l ko -bl 2 -rbl
 ```
 
 ![11](samples/11.jpg) ![12](samples/12.jpg) ![13](samples/13.jpg) ![14](samples/14.jpg)
@@ -331,7 +327,7 @@ python -m trdg.run_doc -c 10 -l ko -bl 2 -rbl
 trdg -c 100 -b 0 -bl 1 -rbl -k 5 -rk -d 1
 
 # Document Mode: noise bg + blur + skew + distortion
-python -m trdg.run_doc -c 10 -l ko -b 0 -bl 1 -rbl -k 2 -rk -d 1
+trdg --document -c 10 -l ko -b 0 -bl 1 -rbl -k 2 -rk -d 1
 ```
 
 </details>
@@ -380,7 +376,7 @@ The script picks a font at random from the `fonts/` directory.
 2. Add `.ttf` or `.otf` font files
 3. Edit `run.py` to add an if statement in `load_fonts()`
 4. Add a dictionary file: `dicts/<two-letter-code>.txt`
-5. Run: `trdg -l <code>` or `python -m trdg.run_doc -l <code>`
+5. Run: `trdg -l <code>` or `trdg --document -l <code>`
 
 </details>
 
