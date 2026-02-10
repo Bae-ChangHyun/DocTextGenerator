@@ -178,7 +178,11 @@ When using `-i` without `-c`, one page is generated per input text file.
 <details>
 <summary>Multi-Variant Generation (-i + -c)</summary>
 
-Combine `-i` (input text) with `-c` (count) to generate **multiple random visual variants** from the same text. User-specified options stay fixed; everything else is randomized per page.
+Combine `-i` (input text) with `-c` (count) to generate **multiple random visual variants** from the same text.
+
+**Rule**: User-specified options stay fixed; unspecified options are randomized per page.
+
+Randomized targets: `font_size`, `line_spacing`, `paragraph_spacing`, `alignment`, `text_color`, `stroke_width`, `background`, `blur`, `skew_angle`, `distorsion`, `margins`, `font_size_variation`
 
 ```bash
 # 1 text file × 20 random variants = 20 pages

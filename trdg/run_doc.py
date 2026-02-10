@@ -139,8 +139,12 @@ def _build_page_params(args, user_specified, fonts, doc_margins):
         p['margins'] = doc_margins
 
     # font_size_variation
+    # If user explicitly fixed font_size, don't randomize variation either
     if 'font_size_variation' not in user_specified:
-        p['font_size_variation'] = rnd.choices([0, 3, 5, 8], weights=[50, 20, 20, 10])[0]
+        if 'font_size' in user_specified:
+            p['font_size_variation'] = 0
+        else:
+            p['font_size_variation'] = rnd.choices([0, 3, 5, 8], weights=[50, 20, 20, 10])[0]
     else:
         p['font_size_variation'] = args.font_size_variation
 
