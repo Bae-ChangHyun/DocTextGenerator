@@ -27,7 +27,7 @@ pip install trdg
 Or clone and install from source:
 
 ```bash
-git clone https://github.com/Bae-ChangHyun/DocTextGenerator.git
+git clone https://github.com/Changroro/DocTextGenerator.git
 cd DocTextGenerator
 pip install -r requirements.txt
 ```

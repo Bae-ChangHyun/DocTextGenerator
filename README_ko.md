@@ -27,7 +27,7 @@ pip install trdg
 또는 소스에서 직접 설치:
 
 ```bash
-git clone https://github.com/Bae-ChangHyun/DocTextGenerator.git
+git clone https://github.com/Changroro/DocTextGenerator.git
 cd DocTextGenerator
 pip install -r requirements.txt
 ```
